@@ -75,10 +75,67 @@ class SplashScreenPage extends StatelessWidget {
 
                     ))
                   ],
+                ),
+
+                const SizedBox(height: 40,),
+
+                Row(
+                  children: [
+                    Expanded(child: InkWell(
+                      onTap: () async {
+                        final myBkash = Bkash(logResponse: true);
+
+                        // final Bkash = Bkash(
+                        //   credentials: BkashCredentials(
+                        //     username: "app_username",
+                        //     password: "app_password",
+                        //     appKey: "app_key",
+                        //     appSecret: "app_secret",
+                        //     isSandbox: false,
+                        //   ),
+                        // );
+
+                        try{
+                          final myAgreement = await myBkash.createAgreement(
+                            context: context, // BuildContext context
+                          );
+
+                          final response = await myBkash.payWithAgreement(
+                            context: Get.context!, // BuildContext context
+                            amount: 100.0, // type as double
+                            agreementId: myAgreement.agreementId,
+                            marchentInvoiceNumber: "invoice123",
+                          );
+
+                           print(response.trxId);
+                        //
+                        }
+                        on BkashFailure catch(e){
+                          print(e.message);
+                        }
+
+
+                      },
+                      child:   Container(
+                        decoration:   BoxDecoration(
+                            color: Colors.deepOrange,
+                            borderRadius: BorderRadius.circular(10)
+                        ),
+                        padding: const EdgeInsets.only(top:20,bottom: 20),
+                        margin: const EdgeInsets.only(left:20,right: 20),
+                        child: const Text("BKash Agreement",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w800,
+                              fontSize: 18
+                          ),
+                        ),
+                      ),
+
+                    ))
+                  ],
                 )
-
-
-
 
               ],
             ),
